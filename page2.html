@@ -1,0 +1,143 @@
+<!-- page2.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For You my love</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto:wght@300;500&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #1a1a1a, #000000);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      position: relative;
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+    h2, img, a.button, audio {
+      position: relative;
+      z-index: 1;
+    }
+    h2 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.5rem;
+      color: #ffcccc;
+      margin-bottom: 1rem;
+      animation: fadeInDown 1.5s ease;
+    }
+    .bouquet {
+      width: 250px;
+      max-width: 90%;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(255, 77, 77, 0.5);
+      animation: fadeIn 2s ease;
+    }
+    audio {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+    }
+    a.button {
+      padding: 12px 24px;
+      background-color: #e60000;
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      text-decoration: none;
+      margin-top: 2rem;
+      transition: background 0.3s ease;
+      animation: fadeInUp 2s ease;
+    }
+    a.button:hover {
+      background-color: #ff1a1a;
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="meteorCanvas"></canvas>
+  <audio autoplay loop controls>
+    <source src="violin.mp3" type="audio/mp3" />
+    Your browser does not support the audio element.
+  </audio>
+  <h2>This bouquet is just a glimpse of what blooms in my heart for you 💐</h2>
+  <img src="https://images.stockcake.com/public/7/a/a/7aa3378f-5ed8-4534-abe2-9ef8f1af59bf_large/elegant-rose-bouquet-stockcake.jpg" alt="Bouquet" class="bouquet" />
+  <a href="page3.html" class="button">See what she wants to say</a>
+  <script>
+    const canvas = document.getElementById('meteorCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const meteors = [];
+
+    function createMeteor() {
+      meteors.push({
+        x: Math.random() * canvas.width,
+        y: 0,
+        length: Math.random() * 80 + 30,
+        speed: Math.random() * 4 + 2,
+        opacity: Math.random() * 0.5 + 0.3
+      });
+    }
+
+    function drawMeteor(m) {
+      const gradient = ctx.createLinearGradient(m.x, m.y, m.x - m.length, m.y + m.length);
+      gradient.addColorStop(0, `rgba(255, 255, 255, ${m.opacity})`);
+      gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      ctx.strokeStyle = gradient;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(m.x, m.y);
+      ctx.lineTo(m.x - m.length, m.y + m.length);
+      ctx.stroke();
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      meteors.forEach((m, i) => {
+        m.x -= m.speed;
+        m.y += m.speed;
+        drawMeteor(m);
+        if (m.y > canvas.height) meteors.splice(i, 1);
+      });
+      if (Math.random() < 0.1) createMeteor();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
